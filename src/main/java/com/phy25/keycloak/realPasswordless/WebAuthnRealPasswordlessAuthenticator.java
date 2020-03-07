@@ -160,7 +160,9 @@ public class WebAuthnRealPasswordlessAuthenticator implements Authenticator {
         }
 
         String baseUrl = UriUtils.getOrigin(context.getUriInfo().getBaseUri());
-        String rpId = context.getUriInfo().getBaseUri().getHost();
+        WebAuthnPolicy policy = getWebAuthnPolicy(context);
+        String rpId = policy.getRpId();
+        if (rpId == null || rpId.isEmpty()) rpId =  context.getUriInfo().getBaseUri().getHost();
 
         Origin origin = new Origin(baseUrl);
         Challenge challenge = new DefaultChallenge(context.getAuthenticationSession().getAuthNote(WebAuthnConstants.AUTH_CHALLENGE_NOTE));
